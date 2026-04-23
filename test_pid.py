@@ -44,3 +44,4 @@ async def pid_basic_test(dut):
     
     # Check if it's moving in the right direction
     assert current_out > 0, "Control output should be positive for positive error"
+
