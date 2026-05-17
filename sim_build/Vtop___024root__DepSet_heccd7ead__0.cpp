@@ -22,17 +22,26 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.pid_controller__DOT__clk = vlSelfRef.clk;
-    vlSelfRef.pid_controller__DOT__rst = vlSelfRef.rst;
-    vlSelfRef.pid_controller__DOT__setpoint = vlSelfRef.setpoint;
-    vlSelfRef.pid_controller__DOT__feedback = vlSelfRef.feedback;
-    vlSelfRef.pid_controller__DOT__kp = vlSelfRef.kp;
-    vlSelfRef.pid_controller__DOT__ki = vlSelfRef.ki;
-    vlSelfRef.pid_controller__DOT__kd = vlSelfRef.kd;
-    vlSelfRef.control_out = vlSelfRef.pid_controller__DOT__control_out;
-    vlSelfRef.pid_controller__DOT__derivative = (0xffffU 
-                                                 & ((IData)(vlSelfRef.pid_controller__DOT__error) 
-                                                    - (IData)(vlSelfRef.pid_controller__DOT__last_error)));
+    vlSelfRef.custom_gated_pid__DOT__clk = vlSelfRef.clk;
+    vlSelfRef.custom_gated_pid__DOT__rst_n = vlSelfRef.rst_n;
+    vlSelfRef.custom_gated_pid__DOT__new_data_i = vlSelfRef.new_data_i;
+    vlSelfRef.custom_gated_pid__DOT__scan_start_target_i 
+        = vlSelfRef.scan_start_target_i;
+    vlSelfRef.custom_gated_pid__DOT__reg_master_peak_1_i 
+        = vlSelfRef.reg_master_peak_1_i;
+    vlSelfRef.custom_gated_pid__DOT__kp_i = vlSelfRef.kp_i;
+    vlSelfRef.custom_gated_pid__DOT__ki_i = vlSelfRef.ki_i;
+    vlSelfRef.custom_gated_pid__DOT__kd_i = vlSelfRef.kd_i;
+    vlSelfRef.dac_out_o = vlSelfRef.custom_gated_pid__DOT__dac_out_o;
+    vlSelfRef.custom_gated_pid__DOT__p2_p_shifted_raw 
+        = (0xffffffffffffULL & VL_SHIFTRS_QQI(48,48,32, vlSelfRef.custom_gated_pid__DOT__p2_p_term_raw, 0xaU));
+    vlSelfRef.custom_gated_pid__DOT__p2_i_shifted_raw 
+        = (0xffffffffffffULL & VL_SHIFTRS_QQI(48,48,32, vlSelfRef.custom_gated_pid__DOT__p2_i_term_raw, 0xaU));
+    vlSelfRef.custom_gated_pid__DOT__p2_d_shifted_raw 
+        = (0xffffffffffffULL & VL_SHIFTRS_QQI(48,48,32, vlSelfRef.custom_gated_pid__DOT__p2_d_term_raw, 0xaU));
+    vlSelfRef.custom_gated_pid__DOT__p2_p_shifted = (IData)(vlSelfRef.custom_gated_pid__DOT__p2_p_shifted_raw);
+    vlSelfRef.custom_gated_pid__DOT__p2_i_shifted = (IData)(vlSelfRef.custom_gated_pid__DOT__p2_i_shifted_raw);
+    vlSelfRef.custom_gated_pid__DOT__p2_d_shifted = (IData)(vlSelfRef.custom_gated_pid__DOT__p2_d_shifted_raw);
 }
 
 void Vtop___024root___eval_triggers__ico(Vtop___024root* vlSelf);
@@ -75,33 +84,142 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Init
-    SData/*15:0*/ __Vdly__pid_controller__DOT__integral;
-    __Vdly__pid_controller__DOT__integral = 0;
+    CData/*4:0*/ __Vdly__custom_gated_pid__DOT__valid_pipe;
+    __Vdly__custom_gated_pid__DOT__valid_pipe = 0;
+    IData/*31:0*/ __Vdly__custom_gated_pid__DOT__p3_p_term;
+    __Vdly__custom_gated_pid__DOT__p3_p_term = 0;
+    IData/*31:0*/ __Vdly__custom_gated_pid__DOT__p3_i_term;
+    __Vdly__custom_gated_pid__DOT__p3_i_term = 0;
+    IData/*31:0*/ __Vdly__custom_gated_pid__DOT__p3_d_term;
+    __Vdly__custom_gated_pid__DOT__p3_d_term = 0;
+    IData/*31:0*/ __Vdly__custom_gated_pid__DOT__p4_integrator_next;
+    __Vdly__custom_gated_pid__DOT__p4_integrator_next = 0;
+    IData/*31:0*/ __Vdly__custom_gated_pid__DOT__p5_pid_sum;
+    __Vdly__custom_gated_pid__DOT__p5_pid_sum = 0;
     // Body
-    __Vdly__pid_controller__DOT__integral = vlSelfRef.pid_controller__DOT__integral;
-    if (vlSelfRef.rst) {
-        __Vdly__pid_controller__DOT__integral = 0U;
-        vlSelfRef.pid_controller__DOT__last_error = 0U;
-        vlSelfRef.pid_controller__DOT__control_out = 0U;
-        vlSelfRef.pid_controller__DOT__error = 0U;
+    __Vdly__custom_gated_pid__DOT__valid_pipe = vlSelfRef.custom_gated_pid__DOT__valid_pipe;
+    __Vdly__custom_gated_pid__DOT__p3_p_term = vlSelfRef.custom_gated_pid__DOT__p3_p_term;
+    __Vdly__custom_gated_pid__DOT__p3_i_term = vlSelfRef.custom_gated_pid__DOT__p3_i_term;
+    __Vdly__custom_gated_pid__DOT__p3_d_term = vlSelfRef.custom_gated_pid__DOT__p3_d_term;
+    __Vdly__custom_gated_pid__DOT__p4_integrator_next 
+        = vlSelfRef.custom_gated_pid__DOT__p4_integrator_next;
+    __Vdly__custom_gated_pid__DOT__p5_pid_sum = vlSelfRef.custom_gated_pid__DOT__p5_pid_sum;
+    if (vlSelfRef.rst_n) {
+        __Vdly__custom_gated_pid__DOT__valid_pipe = 
+            ((0x1eU & ((IData)(vlSelfRef.custom_gated_pid__DOT__valid_pipe) 
+                       << 1U)) | (IData)(vlSelfRef.new_data_i));
+        if ((1U & (IData)(vlSelfRef.custom_gated_pid__DOT__valid_pipe))) {
+            vlSelfRef.custom_gated_pid__DOT__p2_p_term_raw 
+                = (0xffffffffffffULL & VL_MULS_QQQ(48, 
+                                                   (0xffffffffffffULL 
+                                                    & VL_EXTENDS_QI(48,32, vlSelfRef.custom_gated_pid__DOT__p1_error)), 
+                                                   (0xffffffffffffULL 
+                                                    & VL_EXTENDS_QI(48,16, (IData)(vlSelfRef.kp_i)))));
+            vlSelfRef.custom_gated_pid__DOT__p2_i_term_raw 
+                = (0xffffffffffffULL & VL_MULS_QQQ(48, 
+                                                   (0xffffffffffffULL 
+                                                    & VL_EXTENDS_QI(48,32, vlSelfRef.custom_gated_pid__DOT__p1_error)), 
+                                                   (0xffffffffffffULL 
+                                                    & VL_EXTENDS_QI(48,16, (IData)(vlSelfRef.ki_i)))));
+            vlSelfRef.custom_gated_pid__DOT__p2_d_term_raw 
+                = (0xffffffffffffULL & VL_MULS_QQQ(48, 
+                                                   (0xffffffffffffULL 
+                                                    & VL_EXTENDS_QI(48,32, vlSelfRef.custom_gated_pid__DOT__p1_error_diff)), 
+                                                   (0xffffffffffffULL 
+                                                    & VL_EXTENDS_QI(48,16, (IData)(vlSelfRef.kd_i)))));
+        }
+        if ((2U & (IData)(vlSelfRef.custom_gated_pid__DOT__valid_pipe))) {
+            __Vdly__custom_gated_pid__DOT__p3_p_term 
+                = vlSelfRef.custom_gated_pid__DOT__p2_p_shifted;
+            __Vdly__custom_gated_pid__DOT__p3_i_term 
+                = vlSelfRef.custom_gated_pid__DOT__p2_i_shifted;
+            __Vdly__custom_gated_pid__DOT__p3_d_term 
+                = vlSelfRef.custom_gated_pid__DOT__p2_d_shifted;
+        }
+        if ((4U & (IData)(vlSelfRef.custom_gated_pid__DOT__valid_pipe))) {
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_integrator 
+                = (((QData)((IData)((vlSelfRef.custom_gated_pid__DOT__integrator 
+                                     >> 0x1fU))) << 0x20U) 
+                   | (QData)((IData)(vlSelfRef.custom_gated_pid__DOT__integrator)));
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_p3_i_term 
+                = (((QData)((IData)((vlSelfRef.custom_gated_pid__DOT__p3_i_term 
+                                     >> 0x1fU))) << 0x20U) 
+                   | (QData)((IData)(vlSelfRef.custom_gated_pid__DOT__p3_i_term)));
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__temp_int 
+                = (0x1ffffffffULL & (vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_integrator 
+                                     + vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_p3_i_term));
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_max_int = 0x7a120ULL;
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_min_int = 0x1fff85ee0ULL;
+            if (VL_GTS_IQQ(33, vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__temp_int, vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_max_int)) {
+                vlSelfRef.custom_gated_pid__DOT__integrator = 0x7a120U;
+                __Vdly__custom_gated_pid__DOT__p4_integrator_next = 0x7a120U;
+            } else if (VL_LTS_IQQ(33, vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__temp_int, vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__ext_min_int)) {
+                vlSelfRef.custom_gated_pid__DOT__integrator = 0xfff85ee0U;
+                __Vdly__custom_gated_pid__DOT__p4_integrator_next = 0xfff85ee0U;
+            } else {
+                vlSelfRef.custom_gated_pid__DOT__integrator 
+                    = (IData)(vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__temp_int);
+                __Vdly__custom_gated_pid__DOT__p4_integrator_next 
+                    = (IData)(vlSelfRef.custom_gated_pid__DOT__unnamedblk1__DOT__temp_int);
+            }
+        }
+        if ((8U & (IData)(vlSelfRef.custom_gated_pid__DOT__valid_pipe))) {
+            __Vdly__custom_gated_pid__DOT__p5_pid_sum 
+                = ((vlSelfRef.custom_gated_pid__DOT__p3_p_term 
+                    + vlSelfRef.custom_gated_pid__DOT__p4_integrator_next) 
+                   + vlSelfRef.custom_gated_pid__DOT__p3_d_term);
+        }
+        if ((0x10U & (IData)(vlSelfRef.custom_gated_pid__DOT__valid_pipe))) {
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk2__DOT__ext_max_out = 0x7fffU;
+            vlSelfRef.custom_gated_pid__DOT__unnamedblk2__DOT__ext_min_out = 0xffff8000U;
+            vlSelfRef.custom_gated_pid__DOT__dac_out_o 
+                = (VL_GTS_III(32, vlSelfRef.custom_gated_pid__DOT__p5_pid_sum, vlSelfRef.custom_gated_pid__DOT__unnamedblk2__DOT__ext_max_out)
+                    ? 0x7fffU : (VL_LTS_III(32, vlSelfRef.custom_gated_pid__DOT__p5_pid_sum, vlSelfRef.custom_gated_pid__DOT__unnamedblk2__DOT__ext_min_out)
+                                  ? 0x8000U : (0xffffU 
+                                               & vlSelfRef.custom_gated_pid__DOT__p5_pid_sum)));
+        }
+        if (vlSelfRef.new_data_i) {
+            vlSelfRef.custom_gated_pid__DOT__p1_error 
+                = (vlSelfRef.scan_start_target_i - vlSelfRef.reg_master_peak_1_i);
+            vlSelfRef.custom_gated_pid__DOT__p1_error_diff 
+                = ((vlSelfRef.scan_start_target_i - vlSelfRef.reg_master_peak_1_i) 
+                   - vlSelfRef.custom_gated_pid__DOT__prev_error);
+            vlSelfRef.custom_gated_pid__DOT__prev_error 
+                = (vlSelfRef.scan_start_target_i - vlSelfRef.reg_master_peak_1_i);
+        }
     } else {
-        __Vdly__pid_controller__DOT__integral = (0xffffU 
-                                                 & ((IData)(vlSelfRef.pid_controller__DOT__integral) 
-                                                    + (IData)(vlSelfRef.pid_controller__DOT__error)));
-        vlSelfRef.pid_controller__DOT__last_error = vlSelfRef.pid_controller__DOT__error;
-        vlSelfRef.pid_controller__DOT__control_out 
-            = (0xffffU & ((VL_MULS_III(16, (IData)(vlSelfRef.kp), (IData)(vlSelfRef.pid_controller__DOT__error)) 
-                           + VL_MULS_III(16, (IData)(vlSelfRef.ki), (IData)(vlSelfRef.pid_controller__DOT__integral))) 
-                          + VL_MULS_III(16, (IData)(vlSelfRef.kd), (IData)(vlSelfRef.pid_controller__DOT__derivative))));
-        vlSelfRef.pid_controller__DOT__error = (0xffffU 
-                                                & ((IData)(vlSelfRef.setpoint) 
-                                                   - (IData)(vlSelfRef.feedback)));
+        __Vdly__custom_gated_pid__DOT__valid_pipe = 0U;
+        vlSelfRef.custom_gated_pid__DOT__integrator = 0U;
+        vlSelfRef.custom_gated_pid__DOT__dac_out_o = 0U;
+        vlSelfRef.custom_gated_pid__DOT__p2_p_term_raw = 0ULL;
+        vlSelfRef.custom_gated_pid__DOT__p2_i_term_raw = 0ULL;
+        vlSelfRef.custom_gated_pid__DOT__p2_d_term_raw = 0ULL;
+        __Vdly__custom_gated_pid__DOT__p3_p_term = 0U;
+        __Vdly__custom_gated_pid__DOT__p3_i_term = 0U;
+        __Vdly__custom_gated_pid__DOT__p3_d_term = 0U;
+        __Vdly__custom_gated_pid__DOT__p4_integrator_next = 0U;
+        __Vdly__custom_gated_pid__DOT__p5_pid_sum = 0U;
+        vlSelfRef.custom_gated_pid__DOT__p1_error = 0U;
+        vlSelfRef.custom_gated_pid__DOT__p1_error_diff = 0U;
+        vlSelfRef.custom_gated_pid__DOT__prev_error = 0U;
     }
-    vlSelfRef.pid_controller__DOT__integral = __Vdly__pid_controller__DOT__integral;
-    vlSelfRef.control_out = vlSelfRef.pid_controller__DOT__control_out;
-    vlSelfRef.pid_controller__DOT__derivative = (0xffffU 
-                                                 & ((IData)(vlSelfRef.pid_controller__DOT__error) 
-                                                    - (IData)(vlSelfRef.pid_controller__DOT__last_error)));
+    vlSelfRef.custom_gated_pid__DOT__valid_pipe = __Vdly__custom_gated_pid__DOT__valid_pipe;
+    vlSelfRef.custom_gated_pid__DOT__p3_p_term = __Vdly__custom_gated_pid__DOT__p3_p_term;
+    vlSelfRef.custom_gated_pid__DOT__p3_i_term = __Vdly__custom_gated_pid__DOT__p3_i_term;
+    vlSelfRef.custom_gated_pid__DOT__p3_d_term = __Vdly__custom_gated_pid__DOT__p3_d_term;
+    vlSelfRef.custom_gated_pid__DOT__p4_integrator_next 
+        = __Vdly__custom_gated_pid__DOT__p4_integrator_next;
+    vlSelfRef.custom_gated_pid__DOT__p5_pid_sum = __Vdly__custom_gated_pid__DOT__p5_pid_sum;
+    vlSelfRef.dac_out_o = vlSelfRef.custom_gated_pid__DOT__dac_out_o;
+    vlSelfRef.custom_gated_pid__DOT__p2_p_shifted_raw 
+        = (0xffffffffffffULL & VL_SHIFTRS_QQI(48,48,32, vlSelfRef.custom_gated_pid__DOT__p2_p_term_raw, 0xaU));
+    vlSelfRef.custom_gated_pid__DOT__p2_i_shifted_raw 
+        = (0xffffffffffffULL & VL_SHIFTRS_QQI(48,48,32, vlSelfRef.custom_gated_pid__DOT__p2_i_term_raw, 0xaU));
+    vlSelfRef.custom_gated_pid__DOT__p2_d_shifted_raw 
+        = (0xffffffffffffULL & VL_SHIFTRS_QQI(48,48,32, vlSelfRef.custom_gated_pid__DOT__p2_d_term_raw, 0xaU));
+    vlSelfRef.custom_gated_pid__DOT__p2_p_shifted = (IData)(vlSelfRef.custom_gated_pid__DOT__p2_p_shifted_raw);
+    vlSelfRef.custom_gated_pid__DOT__p2_i_shifted = (IData)(vlSelfRef.custom_gated_pid__DOT__p2_i_shifted_raw);
+    vlSelfRef.custom_gated_pid__DOT__p2_d_shifted = (IData)(vlSelfRef.custom_gated_pid__DOT__p2_d_shifted_raw);
 }
 
 void Vtop___024root___eval_triggers__act(Vtop___024root* vlSelf);
@@ -167,7 +285,7 @@ void Vtop___024root___eval(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
             Vtop___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/pid_controller.v", 1, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/verlog_files/custom_gated_pid.v", 3, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -183,7 +301,7 @@ void Vtop___024root___eval(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
             Vtop___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/pid_controller.v", 1, "", "NBA region did not converge.");
+            VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/verlog_files/custom_gated_pid.v", 3, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -194,7 +312,7 @@ void Vtop___024root___eval(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
                 Vtop___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/pid_controller.v", 1, "", "Active region did not converge.");
+                VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/verlog_files/custom_gated_pid.v", 3, "", "Active region did not converge.");
             }
             vlSelfRef.__VactIterCount = ((IData)(1U) 
                                          + vlSelfRef.__VactIterCount);
@@ -217,7 +335,9 @@ void Vtop___024root___eval_debug_assertions(Vtop___024root* vlSelf) {
     // Body
     if (VL_UNLIKELY(((vlSelfRef.clk & 0xfeU)))) {
         Verilated::overWidthError("clk");}
-    if (VL_UNLIKELY(((vlSelfRef.rst & 0xfeU)))) {
-        Verilated::overWidthError("rst");}
+    if (VL_UNLIKELY(((vlSelfRef.rst_n & 0xfeU)))) {
+        Verilated::overWidthError("rst_n");}
+    if (VL_UNLIKELY(((vlSelfRef.new_data_i & 0xfeU)))) {
+        Verilated::overWidthError("new_data_i");}
 }
 #endif  // VL_DEBUG

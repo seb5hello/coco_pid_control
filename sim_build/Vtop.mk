@@ -41,6 +41,7 @@ VM_USER_CFLAGS = \
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
 	-Wl,-rpath,/home/thomassv99/fpga_projects/fpga_env/lib/python3.12/site-packages/cocotb/libs -L/home/thomassv99/fpga_projects/fpga_env/lib/python3.12/site-packages/cocotb/libs -lcocotbvpi_verilator \
+	-lz \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \

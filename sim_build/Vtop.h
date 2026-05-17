@@ -13,7 +13,7 @@
 
 class Vtop__Syms;
 class Vtop___024root;
-class VerilatedVcdC;
+class VerilatedFstC;
 
 // This class is the main interface to the Verilated model
 class alignas(VL_CACHE_LINE_BYTES) Vtop VL_NOT_FINAL : public VerilatedModel {
@@ -31,13 +31,14 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop VL_NOT_FINAL : public VerilatedModel {
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clk,0,0);
-    VL_IN8(&rst,0,0);
-    VL_IN16(&setpoint,15,0);
-    VL_IN16(&feedback,15,0);
-    VL_IN16(&kp,15,0);
-    VL_IN16(&ki,15,0);
-    VL_IN16(&kd,15,0);
-    VL_OUT16(&control_out,15,0);
+    VL_IN8(&rst_n,0,0);
+    VL_IN8(&new_data_i,0,0);
+    VL_IN16(&kp_i,15,0);
+    VL_IN16(&ki_i,15,0);
+    VL_IN16(&kd_i,15,0);
+    VL_OUT16(&dac_out_o,15,0);
+    VL_IN(&scan_start_target_i,31,0);
+    VL_IN(&reg_master_peak_1_i,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

@@ -2,7 +2,7 @@
 // DESCRIPTION: Verilator output: Model implementation (design independent parts)
 
 #include "Vtop__pch.h"
-#include "verilated_vcd_c.h"
+#include "verilated_fst_c.h"
 
 //============================================================
 // Constructors
@@ -11,13 +11,14 @@ Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new Vtop__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
-    , rst{vlSymsp->TOP.rst}
-    , setpoint{vlSymsp->TOP.setpoint}
-    , feedback{vlSymsp->TOP.feedback}
-    , kp{vlSymsp->TOP.kp}
-    , ki{vlSymsp->TOP.ki}
-    , kd{vlSymsp->TOP.kd}
-    , control_out{vlSymsp->TOP.control_out}
+    , rst_n{vlSymsp->TOP.rst_n}
+    , new_data_i{vlSymsp->TOP.new_data_i}
+    , kp_i{vlSymsp->TOP.kp_i}
+    , ki_i{vlSymsp->TOP.ki_i}
+    , kd_i{vlSymsp->TOP.kd_i}
+    , dac_out_o{vlSymsp->TOP.dac_out_o}
+    , scan_start_target_i{vlSymsp->TOP.scan_start_target_i}
+    , reg_master_peak_1_i{vlSymsp->TOP.reg_master_peak_1_i}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
@@ -112,11 +113,11 @@ std::unique_ptr<VerilatedTraceConfig> Vtop::traceConfig() const {
 //============================================================
 // Trace configuration
 
-void Vtop___024root__trace_decl_types(VerilatedVcd* tracep);
+void Vtop___024root__trace_decl_types(VerilatedFst* tracep);
 
-void Vtop___024root__trace_init_top(Vtop___024root* vlSelf, VerilatedVcd* tracep);
+void Vtop___024root__trace_init_top(Vtop___024root* vlSelf, VerilatedFst* tracep);
 
-VL_ATTR_COLD static void trace_init(void* voidSelf, VerilatedVcd* tracep, uint32_t code) {
+VL_ATTR_COLD static void trace_init(void* voidSelf, VerilatedFst* tracep, uint32_t code) {
     // Callback from tracep->open()
     Vtop___024root* const __restrict vlSelf VL_ATTR_UNUSED = static_cast<Vtop___024root*>(voidSelf);
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -131,13 +132,13 @@ VL_ATTR_COLD static void trace_init(void* voidSelf, VerilatedVcd* tracep, uint32
     tracep->popPrefix();
 }
 
-VL_ATTR_COLD void Vtop___024root__trace_register(Vtop___024root* vlSelf, VerilatedVcd* tracep);
+VL_ATTR_COLD void Vtop___024root__trace_register(Vtop___024root* vlSelf, VerilatedFst* tracep);
 
 VL_ATTR_COLD void Vtop::traceBaseModel(VerilatedTraceBaseC* tfp, int levels, int options) {
     (void)levels; (void)options;
-    VerilatedVcdC* const stfp = dynamic_cast<VerilatedVcdC*>(tfp);
+    VerilatedFstC* const stfp = dynamic_cast<VerilatedFstC*>(tfp);
     if (VL_UNLIKELY(!stfp)) {
-        vl_fatal(__FILE__, __LINE__, __FILE__,"'Vtop::trace()' called on non-VerilatedVcdC object;"
+        vl_fatal(__FILE__, __LINE__, __FILE__,"'Vtop::trace()' called on non-VerilatedFstC object;"
             " use --trace-fst with VerilatedFst object, and --trace-vcd with VerilatedVcd object");
     }
     stfp->spTrace()->addModel(this);

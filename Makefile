@@ -1,19 +1,19 @@
 # Makefile
 
-# defaults
 SIM ?= verilator
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES += $(PWD)/pid_controller.v
+# Point to your Verilog source file
+VERILOG_SOURCES += $(PWD)/verlog_files/custom_gated_pid.v
 
-# TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
-TOPLEVEL = pid_controller
+# Top-level module name inside the Verilog file
+TOPLEVEL = custom_fast_pid
 
-# MODULE is the basename of the Python test file
-MODULE = test_pid
+# Name of the Python test module (without the .py extension)
+MODULE = test_pid_fast
 
-# include cocotb's make rules to take care of the simulator setup
+# Enable waveform tracing for Verilator
+EXTRA_ARGS += --trace --trace-fst --trace-structs
+
+# Include standard Cocotb makefiles
 include $(shell cocotb-config --makefiles)/Makefile.sim
-
-# Verilator specific flags
-EXTRA_ARGS += --trace --trace-structs

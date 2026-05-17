@@ -33,7 +33,9 @@ class alignas(VL_CACHE_LINE_BYTES)Vtop__Syms final : public VerilatedSyms {
 
     // SCOPE NAMES
     VerilatedScope __Vscope_TOP;
-    VerilatedScope __Vscope_pid_controller;
+    VerilatedScope __Vscope_custom_gated_pid;
+    VerilatedScope __Vscope_custom_gated_pid__unnamedblk1;
+    VerilatedScope __Vscope_custom_gated_pid__unnamedblk2;
 
     // SCOPE HIERARCHY
     VerilatedHierarchy __Vhier;

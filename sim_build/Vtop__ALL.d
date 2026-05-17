@@ -8,7 +8,7 @@ Vtop__ALL.o: Vtop__ALL.cpp Vtop.cpp Vtop__pch.h \
  /usr/local/share/verilator/include/verilated.h \
  /usr/local/share/verilator/include/verilated_sym_props.h \
  /usr/local/share/verilator/include/vltstd/svdpi.h Vtop__Syms.h Vtop.h \
- Vtop___024root.h /usr/local/share/verilator/include/verilated_vcd_c.h \
+ Vtop___024root.h /usr/local/share/verilator/include/verilated_fst_c.h \
  /usr/local/share/verilator/include/verilated_trace.h \
  Vtop___024root__DepSet_h84412442__0.cpp \
  Vtop___024root__DepSet_heccd7ead__0.cpp Vtop__Dpi.cpp Vtop__Dpi.h \

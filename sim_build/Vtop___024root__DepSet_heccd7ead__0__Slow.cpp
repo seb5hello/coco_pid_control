@@ -11,7 +11,7 @@ VL_ATTR_COLD void Vtop___024root___eval_static(Vtop___024root* vlSelf) {
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.__Vtrigprevexpr___TOP__clk__0 = vlSelfRef.clk;
-    vlSelfRef.__Vtrigprevexpr___TOP__rst__0 = vlSelfRef.rst;
+    vlSelfRef.__Vtrigprevexpr___TOP__rst_n__0 = vlSelfRef.rst_n;
 }
 
 VL_ATTR_COLD void Vtop___024root___eval_initial(Vtop___024root* vlSelf) {
@@ -47,7 +47,7 @@ VL_ATTR_COLD void Vtop___024root___eval_settle(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
             Vtop___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/pid_controller.v", 1, "", "Settle region did not converge.");
+            VL_FATAL_MT("/home/thomassv99/fpga_projects/pid_control/verlog_files/custom_gated_pid.v", 3, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;
@@ -130,7 +130,7 @@ VL_ATTR_COLD void Vtop___024root___dump_triggers__act(Vtop___024root* vlSelf) {
         VL_DBG_MSGF("         'act' region trigger index 0 is active: @(posedge clk)\n");
     }
     if ((2ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 1 is active: @(posedge rst)\n");
+        VL_DBG_MSGF("         'act' region trigger index 1 is active: @(negedge rst_n)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -148,7 +148,7 @@ VL_ATTR_COLD void Vtop___024root___dump_triggers__nba(Vtop___024root* vlSelf) {
         VL_DBG_MSGF("         'nba' region trigger index 0 is active: @(posedge clk)\n");
     }
     if ((2ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(posedge rst)\n");
+        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(negedge rst_n)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -159,25 +159,49 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelf->clk = VL_RAND_RESET_I(1);
-    vlSelf->rst = VL_RAND_RESET_I(1);
-    vlSelf->setpoint = VL_RAND_RESET_I(16);
-    vlSelf->feedback = VL_RAND_RESET_I(16);
-    vlSelf->kp = VL_RAND_RESET_I(16);
-    vlSelf->ki = VL_RAND_RESET_I(16);
-    vlSelf->kd = VL_RAND_RESET_I(16);
-    vlSelf->control_out = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__clk = VL_RAND_RESET_I(1);
-    vlSelf->pid_controller__DOT__rst = VL_RAND_RESET_I(1);
-    vlSelf->pid_controller__DOT__setpoint = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__feedback = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__kp = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__ki = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__kd = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__control_out = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__error = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__integral = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__last_error = VL_RAND_RESET_I(16);
-    vlSelf->pid_controller__DOT__derivative = VL_RAND_RESET_I(16);
+    vlSelf->rst_n = VL_RAND_RESET_I(1);
+    vlSelf->new_data_i = VL_RAND_RESET_I(1);
+    vlSelf->scan_start_target_i = VL_RAND_RESET_I(32);
+    vlSelf->reg_master_peak_1_i = VL_RAND_RESET_I(32);
+    vlSelf->kp_i = VL_RAND_RESET_I(16);
+    vlSelf->ki_i = VL_RAND_RESET_I(16);
+    vlSelf->kd_i = VL_RAND_RESET_I(16);
+    vlSelf->dac_out_o = VL_RAND_RESET_I(16);
+    vlSelf->custom_gated_pid__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->custom_gated_pid__DOT__rst_n = VL_RAND_RESET_I(1);
+    vlSelf->custom_gated_pid__DOT__new_data_i = VL_RAND_RESET_I(1);
+    vlSelf->custom_gated_pid__DOT__scan_start_target_i = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__reg_master_peak_1_i = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__kp_i = VL_RAND_RESET_I(16);
+    vlSelf->custom_gated_pid__DOT__ki_i = VL_RAND_RESET_I(16);
+    vlSelf->custom_gated_pid__DOT__kd_i = VL_RAND_RESET_I(16);
+    vlSelf->custom_gated_pid__DOT__dac_out_o = VL_RAND_RESET_I(16);
+    vlSelf->custom_gated_pid__DOT__prev_error = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__integrator = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__valid_pipe = VL_RAND_RESET_I(5);
+    vlSelf->custom_gated_pid__DOT__p1_error = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p1_error_diff = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p2_p_term_raw = VL_RAND_RESET_Q(48);
+    vlSelf->custom_gated_pid__DOT__p2_i_term_raw = VL_RAND_RESET_Q(48);
+    vlSelf->custom_gated_pid__DOT__p2_d_term_raw = VL_RAND_RESET_Q(48);
+    vlSelf->custom_gated_pid__DOT__p2_p_shifted_raw = VL_RAND_RESET_Q(48);
+    vlSelf->custom_gated_pid__DOT__p2_i_shifted_raw = VL_RAND_RESET_Q(48);
+    vlSelf->custom_gated_pid__DOT__p2_d_shifted_raw = VL_RAND_RESET_Q(48);
+    vlSelf->custom_gated_pid__DOT__p2_p_shifted = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p2_i_shifted = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p2_d_shifted = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p3_p_term = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p3_i_term = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p3_d_term = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p4_integrator_next = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__p5_pid_sum = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__unnamedblk1__DOT__ext_integrator = VL_RAND_RESET_Q(33);
+    vlSelf->custom_gated_pid__DOT__unnamedblk1__DOT__ext_p3_i_term = VL_RAND_RESET_Q(33);
+    vlSelf->custom_gated_pid__DOT__unnamedblk1__DOT__temp_int = VL_RAND_RESET_Q(33);
+    vlSelf->custom_gated_pid__DOT__unnamedblk1__DOT__ext_max_int = VL_RAND_RESET_Q(33);
+    vlSelf->custom_gated_pid__DOT__unnamedblk1__DOT__ext_min_int = VL_RAND_RESET_Q(33);
+    vlSelf->custom_gated_pid__DOT__unnamedblk2__DOT__ext_max_out = VL_RAND_RESET_I(32);
+    vlSelf->custom_gated_pid__DOT__unnamedblk2__DOT__ext_min_out = VL_RAND_RESET_I(32);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
-    vlSelf->__Vtrigprevexpr___TOP__rst__0 = VL_RAND_RESET_I(1);
+    vlSelf->__Vtrigprevexpr___TOP__rst_n__0 = VL_RAND_RESET_I(1);
 }
